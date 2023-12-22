@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useTasks from "../../hooks/useTasks";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -5,7 +6,9 @@ import Swal from "sweetalert2";
 
 const Tasks = () => {
     const [tasks, refetch] = useTasks();
+    const [allTask, setAllTask] = useState(tasks);
 
+    // handle delete task
     const handleDelete = async (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -28,17 +31,27 @@ const Tasks = () => {
                         text: "Your file has been deleted.",
                         icon: "success"
                     });
-                } else {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
                 }
-
             }
         });
     };
 
+    // handle search funtionality
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const text = e.target.value;
+        if (text) {
+            const filterTask = allTask?.filter(task => task?.title?.includes(text.toLowercase));
+            setAllTask(filterTask);
+        } else {
+            setAllTask(tasks);
+        }
+    }
+
+
 
     return (
-        <div className="grid gap-2 grid-cols-3 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-2 py-8">
             <div>
                 <div className="p-4 bg-[#CAD9F6] border rounded">
                     <div>

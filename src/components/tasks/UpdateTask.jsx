@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { toast } from "react-toastify";
 import useTasks from "../../hooks/useTasks";
 
-const AddTask = () => {
+const UpdateTask = () => {
     const [tasks, refetch] = useTasks();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    const handleAddTask = async (data) => {
+    const handleUpdateTask = async (data) => {
             // Validate fields
             if (!data.title) {
                 toast.error('Title is required');
@@ -52,7 +52,7 @@ const AddTask = () => {
                     <div className="modal-box  w-full md:m-4 md:w-[500px] p-4">
                         <h3 className="font-bold text-lg mb-2">Add Task</h3>
                         {/* add task form */}
-                        <form onSubmit={handleSubmit(handleAddTask)}>
+                        <form onSubmit={handleSubmit(handleUpdateTask)}>
                             <input {...register('title', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task Title" />
                             {errors.title && <span className="text-red-500 text-sm -mt-2 block">Title is required</span>}
 
@@ -80,4 +80,4 @@ const AddTask = () => {
     );
 };
 
-export default AddTask;
+export default UpdateTask;
