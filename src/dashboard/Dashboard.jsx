@@ -1,5 +1,5 @@
 
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import Tasks from "../components/tasks/Tasks";
 import AddTask from "../components/tasks/addTask";
 import DashbordHeader from "../components/dashbordHeader/DashbordHeader";
@@ -33,8 +33,7 @@ const Dashboard = () => {
                         </div>
                         {/* outlet */}
                         <div className="p-2 lg:p-10">
-                            <AddTask />
-                            <Tasks />
+                            <Outlet />
                         </div>
                     </div>
                 </div>

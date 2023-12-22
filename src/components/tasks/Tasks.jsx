@@ -3,6 +3,7 @@ import useTasks from "../../hooks/useTasks";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Tasks = () => {
     const [tasks, refetch] = useTasks();
@@ -64,7 +65,7 @@ const Tasks = () => {
                                 <div className="flex justify-between items-center">
                                     <h2 className="font-bold text-base">{task?.title}</h2>
                                     <div className="flex gap-2">
-                                        <MdOutlineModeEditOutline />
+                                        <Link to={`/dashboard/updateTask/${task._id}`}><MdOutlineModeEditOutline /></Link>
                                         <RiDeleteBin6Line onClick={() => handleDelete(task?._id)} />
                                     </div>
                                 </div>

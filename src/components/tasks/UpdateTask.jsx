@@ -1,44 +1,45 @@
 import { GoPlus } from "react-icons/go";
 import { useForm } from 'react-hook-form';
 import { toast } from "react-toastify";
-import useTasks from "../../hooks/useTasks";
+import { useLoaderData } from "react-router-dom";
 
 const UpdateTask = () => {
-    const [tasks, refetch] = useTasks();
+    const data = useLoaderData();
+    console.log(data);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     const handleUpdateTask = async (data) => {
-            // Validate fields
-            if (!data.title) {
-                toast.error('Title is required');
-                return;
-            }
-            if (!data.description) {
-                toast.error('Description is required');
-                return;
-            }
-            if (!data.priority) {
-                toast.error('Priority is required');
-                return;
-            }
-            if (!data.status) {
-                toast.error('Status is required');
-                return;
-            }
-            // If all fields are valid, proceed with fetch
-            const res = await fetch('http://localhost:5000/tasks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            if (res.ok) {
-                toast.success('Task added successfully.');
-                refetch();
-                reset();
-                document.getElementById('my_modal_3').close();
-            } 
+        // Validate fields
+        if (!data.title) {
+            toast.error('Title is required');
+            return;
+        }
+        if (!data.description) {
+            toast.error('Description is required');
+            return;
+        }
+        if (!data.priority) {
+            toast.error('Priority is required');
+            return;
+        }
+        if (!data.status) {
+            toast.error('Status is required');
+            return;
+        }
+        // If all fields are valid, proceed with fetch
+        const res = await fetch('http://localhost:5000/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            toast.success('Task added successfully.');
+            refetch();
+            reset();
+            document.getElementById('my_modal_3').close();
+        }
     };
 
     return (
