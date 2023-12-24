@@ -1,12 +1,13 @@
 import { GoPlus } from "react-icons/go";
 import { useForm } from 'react-hook-form';
-import { toast } from "react-toastify";
 import { useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// ... (imports and other code)
 
 const UpdateTask = () => {
-    const data = useLoaderData();
-    console.log(data);
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { _id, title, description, status, priority, deadline } = useLoaderData();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     const handleUpdateTask = async (data) => {
         // Validate fields
@@ -26,56 +27,69 @@ const UpdateTask = () => {
             toast.error('Status is required');
             return;
         }
+        if (!data.deadline) {
+            toast.error('Deadline is required');
+            return;
+        }
         // If all fields are valid, proceed with fetch
-        const res = await fetch('http://localhost:5000/tasks', {
-            method: 'POST',
+        const res = await fetch(`https://taskmanagement-five.vercel.app/taskUpdate/${_id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
         if (res.ok) {
-            toast.success('Task added successfully.');
-            refetch();
-            reset();
-            document.getElementById('my_modal_3').close();
+            toast.success('Task updated successfully.');
+            console.log(res);
         }
     };
 
     return (
         <div className="flex justify-between items-center">
-            <div>
-                <h2 className="font-bold text-2xl text-[#3D3D3D]">Tasks</h2>
-            </div>
-            <div>
-                <button className="bg-[#2563DC] text-white rounded py-1 px-2 md:py-2 md:px-6 flex items-center gap-2 text-sm " onClick={() => document.getElementById('my_modal_3').showModal()}>New task <GoPlus className="text-white" /></button>
-                <dialog id="my_modal_3" className="modal rounded">
-                    <div className="modal-box  w-full md:m-4 md:w-[500px] p-4">
-                        <h3 className="font-bold text-lg mb-2">Add Task</h3>
-                        {/* add task form */}
-                        <form onSubmit={handleSubmit(handleUpdateTask)}>
-                            <input {...register('title', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task Title" />
-                            {errors.title && <span className="text-red-500 text-sm -mt-2 block">Title is required</span>}
+            <div className="flex items-center justify-center w-full">
+                <div>
+                    <h3 className="font-bold text-lg mb-2">Update Task</h3>
+                    {/* add task form */}
+                    <form onSubmit={handleSubmit(handleUpdateTask)}>
+                        <input {...register('title', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task Title" defaultValue={title} />
+                        {errors.title && <span className="text-red-500 text-sm -mt-2 block">Title is required</span>}
 
-                            <textarea {...register('description', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task Description" />
-                            {errors.description && <span className="text-red-500 text-sm -mt-2 block">Description is required</span>}
+                        <textarea {...register('description', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task Description" defaultValue={description} />
+                        {errors.description && <span className="text-red-500 text-sm -mt-2 block">Description is required</span>}
 
-                            <input {...register('priority', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Task priority" />
-                            {errors.priority && <span className="text-red-500 text-sm -mt-2 block">Priority is required</span>}
-
-                            <input {...register('status', { required: true })} className="border focus:outline-none py-1 px-2 rounded-sm w-full mb-2" placeholder="Status" defaultValue={'to-do'} hidden />
-                            {errors.status && <span className="text-red-500 text-xm -mt-2 block">Status is required</span>}
-
-                            <div className="flex justify-end">
-                                <input className="bg-[#2563DC] text-white rounded py-1 px-4 text-sm" type="submit" value="Add Task" />
+                        <div className="flex gap-4">
+                            <div>
+                                <select {...register('priority', { required: true })} className="border focus:outline-none w-full leading-none py-1 px-2 rounded-sm mb-2">
+                                    <option value="">Select Priority</option>
+                                    <option value="low" selected={priority === 'low'}>Low</option>
+                                    <option value="moderate" selected={priority === 'moderate'}>Moderate</option>
+                                    <option value="high" selected={priority === 'high'}>High</option>
+                                    {/* Add more options as needed */}
+                                </select>
+                                {errors.priority && <span className="text-red-500 text-sm -mt-2 block">Priority is required</span>}
                             </div>
-                        </form>
-                        {/* end add task form */}
-                        <form method="dialog">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                        </form>
-                    </div>
-                </dialog>
+                            <div>
+                                <label className="block mb-2">
+                                    <input {...register('deadline', { required: true })} type="date" className="border focus:outline-none   py-1 px-2 rounded-sm w-full mb-2" defaultValue={deadline} />
+                                </label>
+                                {errors.deadline && <span className="text-red-500 text-sm -mt-2 block">Deadline is required</span>}
+                            </div>
+                        </div>
+
+                        <select {...register('status', { required: true })} className="border focus:outline-none w-full leading-none py-1 px-2 rounded-sm mb-2">
+                            <option value="">Change Status</option>
+                            <option value="to-do" selected={status === 'to-do'}>To-do</option>
+                            <option value="on-going" selected={status === 'on-going'}>Ongoing</option>
+                            <option value="completed" selected={status === 'completed'}>Completed</option>
+                        </select>
+                        {errors.status && <span className="text-red-500 text-xm -mt-2 block">Status is required</span>}
+
+                        <div className="flex justify-end">
+                            <input className="bg-[#31A0FE] text-white rounded py-1 px-4 text-sm" type="submit" value="Update Task" />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

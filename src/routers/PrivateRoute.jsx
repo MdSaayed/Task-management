@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import { Navigate, useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+
 
 
 const PrivateRoute = ({ children }) => {
@@ -15,7 +15,7 @@ const PrivateRoute = ({ children }) => {
         return children;
     }
 
-    return <Navigate state={location.pathname} to={'/signin'}></Navigate>
+    return <Navigate to={'/'}></Navigate>
 };
 
 export default PrivateRoute;

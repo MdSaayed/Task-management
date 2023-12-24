@@ -1,9 +1,14 @@
-import { createContext } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoIosSearch } from "react-icons/io";
+import { AuthContext } from "../../providers/AuthProvider";
+import { useContext } from "react";
 
 
 const DashbordHeader = () => {
+    const {user} = useContext(AuthContext);
+    console.log(user);
+
+
     return (
         <div className="flex gap-4 border-b px-2 md:px-10 pb-6 items-center">
             <div className="w-[80%] ">
@@ -14,7 +19,7 @@ const DashbordHeader = () => {
             </div>
             <div className="flex gap-4 items-center justify-end w-[20%]">
                 <IoMdNotificationsOutline className="w-[25px] h-[25px]" />
-                <img className="w-[30px] h-[30px]" src="https://i.ibb.co/yNPwYyk/User-Avatar.png" alt="" />
+                <img className="w-[30px] h-[30px] rounded-full" src={user?.photoURL} alt="" />
             </div>
         </div>
     );

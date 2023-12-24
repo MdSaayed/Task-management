@@ -4,7 +4,7 @@ const useTasks = () => {
     const { isLoading, isError, data: tasks, error, refetch } = useQuery({
         queryKey: ['todos'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/tasks');
+            const res = await fetch('https://taskmanagement-five.vercel.app/tasks');
             return res.json();
         },
     });
